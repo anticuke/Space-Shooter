@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour
     private bool gameOver;
     private bool restart;
     private int score;
+    private int lives;
 
     void Start()
     {
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour
         restartText.text = "";
         gameOverText.text = "";
         score = 0;
+        lives = 3;
         UpdateScore();
         StartCoroutine (SpawnWaves());
     }
@@ -63,9 +65,9 @@ public class GameController : MonoBehaviour
 
             if (gameOver)
             {
-                restartText.text = "PRESS 'X' TO RESTART";
-                restart = true;
-                break;
+                    restartText.text = "PRESS 'X' TO RESTART";
+                    restart = true;
+                    break;
             }
         }
     }
@@ -78,10 +80,11 @@ public class GameController : MonoBehaviour
 
     void UpdateScore()
     {
-        scoreText.text = "POINTS: " + score;
-        if (score >= 100)
+        scoreText.text = "LIVES: " + lives + " / POINTS: " + score;
+        if (score >= 1000)
         {
             gameOverText.text = "YOU WIN! GAME CREATED BY YNA CAMAGAY";
+            FindObjectOfType<SoundEffects>().WinSound();
             gameOver = true;
             restart = true;
         }
@@ -90,8 +93,16 @@ public class GameController : MonoBehaviour
     public void GameOver()
     {
         gameOverText.text = "GAME OVER! GAME CREATED BY YNA CAMAGAY";
+        FindObjectOfType<SoundEffects>().DeathSound();
         gameOver = true;
         restart = true;
     }
 
+
+    //LIVES
+    public void MinusLives(int newLifeValue)
+    {
+        lives -= newLifeValue;
+        UpdateScore();
+    }
 }
